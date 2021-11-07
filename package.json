@@ -5,10 +5,10 @@
     "email": "ihenrits@gmail.com"
   },
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "cypress": "3.6.0"
