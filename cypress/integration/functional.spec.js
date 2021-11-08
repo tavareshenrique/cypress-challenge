@@ -2,6 +2,8 @@
 
 import faker from 'faker';
 
+import '../support/commandsAccount'
+
 import locators from '../support/locators';
 
 describe('Should test at a functional level', () => {
@@ -10,19 +12,16 @@ describe('Should test at a functional level', () => {
     cy.resetApp()
   })
 
-  it('should create an account', () => {
+  it.only('should create an account', () => {
     const accountName = faker.finance.accountName();
 
-    cy.get(locators.MENU.SETTINGS).click()
-    cy.get(locators.MENU.ACCOUNTS).click()
-
-    cy.get(locators.ACCOUNTS.NOME).type(accountName)
-    cy.get(locators.ACCOUNTS.BTN_SAVE).click()
+    cy.accessAccountMenu()
+    cy.addAccount(accountName)
 
     cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso')
   })
 
-  it.only('should update an account', () => {
+  it('should update an account', () => {
     const accountName = faker.finance.accountName();
 
     cy.get(locators.MENU.SETTINGS).click()
