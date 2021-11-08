@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "cypress": "3.6.0",
+    "cypress-xpath": "^1.6.2",
     "faker": "^5.5.3"
   }
 }
