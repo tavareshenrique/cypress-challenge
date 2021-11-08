@@ -50,5 +50,19 @@ describe('Should test at a functional level', () => {
       timeout: 10000
     })
   })
+
+  it.only('should create a transaction', () => {
+    cy.get(locators.MENU.TRANSACTIONS).click()
+
+    cy.get(locators.TRANSACTIONS.DESCRIPTION).type('Salário')
+    cy.get(locators.TRANSACTIONS.VALUE).type('123')
+    cy.get(locators.TRANSACTIONS.INTERESTED).type(faker.finance.account())
+    cy.get(locators.TRANSACTIONS.BTN_SAVE).click()
+
+    cy.get(locators.MESSAGE).should('contain', 'sucesso')
+
+    cy.get(locators.EXTRACT.LINES).should('have.length', 7)
+    cy.xpath(locators.EXTRACT.XP_SEARCH_ELEMENT).should('exist')
+  })
 })
 
