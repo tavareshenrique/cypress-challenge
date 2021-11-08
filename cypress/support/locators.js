@@ -12,7 +12,7 @@ const locators = {
   ACCOUNTS: {
     NOME: '[data-test=nome]',
     BTN_SAVE: '.btn',
-    XP_BTN_CHANGE: "//table//td[contains(., 'Investment Account')]/..//i[@class='far fa-edit']"
+    XP_BTN_CHANGE: "//table//td[contains(., 'Test Account')]/..//i[@class='far fa-edit']"
   },
   MESSAGE: '.toast-message',
 }

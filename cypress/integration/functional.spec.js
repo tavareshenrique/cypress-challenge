@@ -12,17 +12,17 @@ describe('Should test at a functional level', () => {
     cy.resetApp()
   })
 
-  it.only('should create an account', () => {
-    const accountName = faker.finance.accountName();
+  it('should create an account', () => {
 
     cy.accessAccountMenu()
-    cy.addAccount(accountName)
+    cy.addAccount('Test Account')
 
-    cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso')
+    cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso', {
+      timeout: 10000
+    })
   })
 
   it('should update an account', () => {
-    const accountName = faker.finance.accountName();
 
     cy.get(locators.MENU.SETTINGS).click()
     cy.get(locators.MENU.ACCOUNTS).click()
@@ -31,10 +31,24 @@ describe('Should test at a functional level', () => {
 
     cy.get(locators.ACCOUNTS.NOME)
       .clear()
-      .type(accountName)
+      .type('Updated Account')
     cy.get(locators.ACCOUNTS.BTN_SAVE).click()
 
-    cy.get(locators.MESSAGE).should('contain', 'Conta atualizada com sucesso')
+    cy.get(locators.MESSAGE).should('contain', 'Conta atualizada com sucesso', {
+      timeout: 10000
+    })
+  })
+
+  it('should not create an account with same name', () => {
+    cy.accessAccountMenu()
+
+    cy.addAccount('Updated Account')
+
+    cy.get(locators.ACCOUNTS.BTN_SAVE).click()
+
+    cy.get(locators.MESSAGE).should('contain', 'code 400', {
+      timeout: 10000
+    })
   })
 })
 
