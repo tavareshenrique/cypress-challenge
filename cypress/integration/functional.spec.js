@@ -1,7 +1,5 @@
 /// <reference types="Cypress" />
 
-import faker from 'faker';
-
 import '../support/commandsAccount'
 
 import locators from '../support/locators';
@@ -9,6 +7,11 @@ import locators from '../support/locators';
 describe('Should test at a functional level', () => {
   before(() => {
     cy.login('ihenrits@gmail.com', '123123')
+    cy.resetApp()
+  })
+
+  beforeEach(() => {
+    cy.get(locators.MENU.HOME).click()
     cy.resetApp()
   })
 
@@ -27,7 +30,7 @@ describe('Should test at a functional level', () => {
     cy.get(locators.MENU.SETTINGS).click()
     cy.get(locators.MENU.ACCOUNTS).click()
 
-    cy.xpath(locators.ACCOUNTS.XP_BTN_CHANGE).click()
+    cy.xpath(locators.ACCOUNTS.XP_BTN_CHANGE('Conta para alterar')).click()
 
     cy.get(locators.ACCOUNTS.NOME)
       .clear()
@@ -42,7 +45,7 @@ describe('Should test at a functional level', () => {
   it('should not create an account with same name', () => {
     cy.accessAccountMenu()
 
-    cy.addAccount('Updated Account')
+    cy.addAccount('Conta mesmo nome')
 
     cy.get(locators.ACCOUNTS.BTN_SAVE).click()
 
@@ -56,8 +59,9 @@ describe('Should test at a functional level', () => {
 
     cy.get(locators.TRANSACTIONS.DESCRIPTION).type('Salário')
     cy.get(locators.TRANSACTIONS.VALUE).type('123')
-    cy.get(locators.TRANSACTIONS.INTERESTED).type(faker.finance.account())
-    cy.get(locators.TRANSACTIONS.ACCOUNT).select('Conta com movimentacao')
+    cy.get(locators.TRANSACTIONS.INTERESTED).type('Itaú')
+    cy.get(locators.TRANSACTIONS.ACCOUNT).select('Conta para movimentacoes')
+    cy.get(locators.TRANSACTIONS.STATUS).click()
     cy.get(locators.TRANSACTIONS.BTN_SAVE).click()
 
     cy.get(locators.MESSAGE).should('contain', 'sucesso')
@@ -68,13 +72,29 @@ describe('Should test at a functional level', () => {
 
   it('should get balance', () => {
     cy.get(locators.MENU.HOME).click()
-    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta com movimentacao')).should('contain', '1.500,00')
+    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '534,00')
+
+    cy.get(locators.MENU.EXTRACT).click()
+    cy.xpath(locators.EXTRACT.FN_XP_ALTERAR_ELEMENT('Movimentacao 1, calculo saldo')).click()
+
+    cy.get(locators.TRANSACTIONS.DESCRIPTION).should('have.value', 'Movimentacao 1, calculo saldo')
+    cy.get(locators.TRANSACTIONS.STATUS).click()
+    cy.get(locators.TRANSACTIONS.BTN_SAVE).click()
+    cy.get(locators.MESSAGE).should('contain', 'sucesso')
+
+    cy.get(locators.MESSAGE).should('not.have.value', 'sucesso')
+
+    cy.wait(1000)
+
+    cy.get(locators.MENU.HOME).click()
+    
+    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '4.034,00')
   })
 
   it('should remove a transaction', () => {
     cy.get(locators.MENU.EXTRACT).click()
 
-    cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Salário')).click()
+    cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Movimentacao para exclusao')).click()
 
     cy.get(locators.MESSAGE).should('contain', 'sucesso')
 
