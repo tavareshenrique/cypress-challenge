@@ -51,18 +51,24 @@ describe('Should test at a functional level', () => {
     })
   })
 
-  it.only('should create a transaction', () => {
+  it('should create a transaction', () => {
     cy.get(locators.MENU.TRANSACTIONS).click()
 
     cy.get(locators.TRANSACTIONS.DESCRIPTION).type('Salário')
     cy.get(locators.TRANSACTIONS.VALUE).type('123')
     cy.get(locators.TRANSACTIONS.INTERESTED).type(faker.finance.account())
+    cy.get(locators.TRANSACTIONS.ACCOUNT).select('Conta com movimentacao')
     cy.get(locators.TRANSACTIONS.BTN_SAVE).click()
 
     cy.get(locators.MESSAGE).should('contain', 'sucesso')
 
     cy.get(locators.EXTRACT.LINES).should('have.length', 7)
     cy.xpath(locators.EXTRACT.XP_SEARCH_ELEMENT).should('exist')
+  })
+
+  it.only('should get balance', () => {
+    cy.get(locators.MENU.HOME).click()
+    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta com movimentacao')).should('contain', '1.500,00')
   })
 })
 
