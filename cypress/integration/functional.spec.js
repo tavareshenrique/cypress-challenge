@@ -66,7 +66,7 @@ describe('Should test at a functional level', () => {
     cy.xpath(locators.EXTRACT.XP_SEARCH_ELEMENT).should('exist')
   })
 
-  it.only('should get balance', () => {
+  it('should get balance', () => {
     cy.get(locators.MENU.HOME).click()
     cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta com movimentacao')).should('contain', '1.500,00')
   })
