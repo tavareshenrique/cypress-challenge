@@ -7,7 +7,6 @@ import locators from '../support/locators';
 describe('Should test at a functional level', () => {
   before(() => {
     cy.login('ihenrits@gmail.com', '123123')
-    cy.resetApp()
   })
 
   beforeEach(() => {
@@ -16,7 +15,6 @@ describe('Should test at a functional level', () => {
   })
 
   it('should create an account', () => {
-
     cy.accessAccountMenu()
     cy.addAccount('Test Account')
 
@@ -26,7 +24,6 @@ describe('Should test at a functional level', () => {
   })
 
   it('should update an account', () => {
-
     cy.get(locators.MENU.SETTINGS).click()
     cy.get(locators.MENU.ACCOUNTS).click()
 
