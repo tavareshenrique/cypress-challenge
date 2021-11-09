@@ -70,5 +70,14 @@ describe('Should test at a functional level', () => {
     cy.get(locators.MENU.HOME).click()
     cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta com movimentacao')).should('contain', '1.500,00')
   })
+
+  it('should remove a transaction', () => {
+    cy.get(locators.MENU.EXTRACT).click()
+
+    cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Salário')).click()
+
+    cy.get(locators.MESSAGE).should('contain', 'sucesso')
+
+  })
 })
 

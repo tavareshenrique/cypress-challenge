@@ -10,6 +10,7 @@ const locators = {
     ACCOUNTS: '[href="/contas"]',
     RESET: '[href="/reset"]',
     TRANSACTIONS: '[href="/movimentacao"]',
+    EXTRACT: '[data-test=menu-extrato]',
   },
   ACCOUNTS: {
     NOME: '[data-test=nome]',
@@ -26,7 +27,8 @@ const locators = {
   },
   EXTRACT: {
     LINES: '.list-group > li',
-    XP_SEARCH_ELEMENT: "//span[contains(., 'Salário')]//following-sibling::small[contains(., '123')]"
+    XP_SEARCH_ELEMENT: "//span[contains(., 'Salário')]//following-sibling::small[contains(., '123')]",
+    FN_XP_REMOVE_ELEMENT: account => `//span[contains(., '${account}')]/../../..//i[@class='far fa-trash-alt']`
   },
   BALANCE: {
     FN_XP_SALDO_CONTA: (name) => `//td[contains(., '${name}')]//../td[2]`
