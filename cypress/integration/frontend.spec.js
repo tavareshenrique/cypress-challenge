@@ -5,6 +5,10 @@ import '../support/commandsAccount';
 import locators from '../support/locators';
 
 describe('Should test at a functional level', () => {
+  after(() => {
+    cy.clearLocalStorage();
+  });
+
   before(() => {
     cy.server();
 
@@ -43,7 +47,7 @@ describe('Should test at a functional level', () => {
     cy.resetApp();
   });
 
-  it('should create an account', () => {
+  it.only('should create an account', () => {
     cy.accessAccountMenu();
     cy.addAccount('Test Account');
 
