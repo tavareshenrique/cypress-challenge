@@ -69,7 +69,7 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it.only('should create a transaction', () => {
+  it('should create a transaction', () => {
     cy.getAccountByName('Conta para movimentacoes', token).then((accountId) => {
       cy.request({
         method: 'POST',
