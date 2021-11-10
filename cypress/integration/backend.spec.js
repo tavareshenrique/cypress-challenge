@@ -11,14 +11,13 @@ describe('Should test at a functional level', () => {
   })
 
   beforeEach(() => {
-    // cy.get(locators.MENU.HOME).click()
-    // cy.resetApp()
+    cy.resetRest(token)
   })
 
   it.only('should create an account', () => {
     cy.request({
       method: 'POST',
-      url: 'https://barrigarest.wcaquino.me/contas',
+      url: '/contas',
       headers: {
         Authorization: `JWT ${token}`
       },
