@@ -14,7 +14,7 @@ describe('Should test at a functional level', () => {
     cy.resetRest(token)
   })
 
-  it.only('should create an account', () => {
+  it('should create an account', () => {
     cy.request({
       method: 'POST',
       url: '/contas',
@@ -33,7 +33,32 @@ describe('Should test at a functional level', () => {
     })   
   })
 
-  it('should update an account', () => {
+  it.only('should update an account', () => {
+    cy.request({
+      method: 'GET',
+      url: '/contas',
+      headers: {
+        Authorization: `JWT ${token}`
+      },
+      qs: {
+        nome: 'Conta para alterar',
+      },
+    }).then(res => {
+      cy.request({
+        method: 'PUT',
+        url: `/contas/${res.body[0].id}`,
+        headers: {
+          Authorization: `JWT ${token}`
+        },
+        body: {
+          nome: 'Conta elterada via rest',
+        }
+      }).as('response')
+
+      cy.get('@response').its('status').should('be.equal', 200)
+    })
+
+    
   })
 
   it('should not create an account with same name', () => {
