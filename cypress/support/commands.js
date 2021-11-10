@@ -48,3 +48,16 @@ Cypress.Commands.add('getAccountByName', (accountName, token) => {
     },
   }).then((res) => res.body[0].id);
 });
+
+Cypress.Commands.add('getTransactions', (transactionName, token) => {
+  cy.request({
+    method: 'GET',
+    url: '/transacoes',
+    headers: {
+      Authorization: `JWT ${token}`,
+    },
+    qs: {
+      descricao: transactionName,
+    },
+  }).then((res) => res.body[0]);
+});
