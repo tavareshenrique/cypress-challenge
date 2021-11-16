@@ -270,7 +270,7 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it.only('should test colors', () => {
+  it('should test colors', () => {
     cy.route({
       method: 'GET',
       url: '/extrato/**',
@@ -291,5 +291,15 @@ describe('Should test at a functional level', () => {
     cy.xpath(locators.EXTRACT.FN_XP_LINE('Receita Pendente')).should('have.class', 'receitaPendente');
     cy.xpath(locators.EXTRACT.FN_XP_LINE('Despesa Paga')).should('have.class', 'despesaPaga');
     cy.xpath(locators.EXTRACT.FN_XP_LINE('Despesa Pendente')).should('have.class', 'despesaPendente');
+  });
+
+  it('should test the responsiveness', () => {
+    cy.get('[data-test=menu-home]').should('exist')
+      .and('be.visible');
+
+    cy.viewport(500, 700);
+
+    cy.get('[data-test=menu-home]').should('exist')
+      .and('be.not.visible');
   });
 });
