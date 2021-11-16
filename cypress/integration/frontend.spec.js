@@ -91,7 +91,7 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it.only('should not create an account with same name', () => {
+  it('should not create an account with same name', () => {
     cy.route({
       method: 'POST',
       url: '/contas',
@@ -109,12 +109,45 @@ describe('Should test at a functional level', () => {
   });
 
   it('should create a transaction', () => {
+    cy.route({
+      method: 'POST',
+      url: '/transacoes',
+      response: {
+        id: 31433,
+        descricao: 'test',
+        envolvido: 'test_envolvido',
+        observacao: null,
+        tipo: 'REC',
+        data_transacao: '2021-11-16T03:00:00.000z',
+      },
+    });
+
+    cy.route({
+      method: 'GET',
+      url: '/extrato/**',
+      response: [{
+        conta: 'Conta para movimentacoes', id: 854851, descricao: 'Movimentacao de conta', envolvido: 'BBB', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1500.00', status: true, conta_id: 919618, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta com movimentacao', id: 854846, descricao: 'Movimentacao de conta', envolvido: 'BBB', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1500.00', status: true, conta_id: 919618, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para saldo', id: 854847, descricao: 'Movimentacao 1, calculo saldo', envolvido: 'CCC', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '3500.00', status: false, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para saldo', id: 854848, descricao: 'Movimentacao 2, calculo saldo', envolvido: 'DDD', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1000.00', status: true, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para saldo', id: 854849, descricao: 'Movimentacao 3, calculo saldo', envolvido: 'EEE', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '1534.00', status: true, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para extrato', id: 854850, descricao: 'Movimentacao para extrato', envolvido: 'FFF', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-220.00', status: true, conta_id: 919620, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para extrato', id: 854850, descricao: 'Salário', envolvido: 'FFF', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '123.00', status: true, conta_id: 919620, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }],
+    });
+
     cy.get(locators.MENU.TRANSACTIONS).click();
 
     cy.get(locators.TRANSACTIONS.DESCRIPTION).type('Salário');
     cy.get(locators.TRANSACTIONS.VALUE).type('123');
     cy.get(locators.TRANSACTIONS.INTERESTED).type('Itaú');
-    cy.get(locators.TRANSACTIONS.ACCOUNT).select('Conta para movimentacoes');
+    cy.get(locators.TRANSACTIONS.ACCOUNT).select('Banco');
     cy.get(locators.TRANSACTIONS.STATUS).click();
     cy.get(locators.TRANSACTIONS.BTN_SAVE).click();
 
