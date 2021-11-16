@@ -211,7 +211,7 @@ describe('Should test at a functional level', () => {
     cy.get(locators.MESSAGE).should('contain', 'sucesso');
   });
 
-  it.only('should validate data send to create an account', () => {
+  it('should validate data send to create an account', () => {
     // const reqStub = cy.stub();
 
     cy.route({
@@ -268,5 +268,28 @@ describe('Should test at a functional level', () => {
     cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso', {
       timeout: 10000,
     });
+  });
+
+  it.only('should test colors', () => {
+    cy.route({
+      method: 'GET',
+      url: '/extrato/**',
+      response: [{
+        conta: 'Conta para movimentacoes', id: 854851, descricao: 'Receita Paga', envolvido: 'AAA', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1500.00', status: true, conta_id: 919618, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta com movimentacao', id: 854846, descricao: 'Receita Pendente', envolvido: 'BBB', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1500.00', status: false, conta_id: 919618, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para saldo', id: 854847, descricao: 'Despesa Paga', envolvido: 'CCC', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '3500.00', status: true, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }, {
+        conta: 'Conta para saldo', id: 854848, descricao: 'Despesa Pendente', envolvido: 'DDD', observacao: null, tipo: 'DESP', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '-1000.00', status: false, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      }],
+    });
+
+    cy.get(locators.MENU.EXTRACT).click();
+
+    cy.xpath(locators.EXTRACT.FN_XP_LINE('Receita Paga')).should('have.class', 'receitaPaga');
+    cy.xpath(locators.EXTRACT.FN_XP_LINE('Receita Pendente')).should('have.class', 'receitaPendente');
+    cy.xpath(locators.EXTRACT.FN_XP_LINE('Despesa Paga')).should('have.class', 'despesaPaga');
+    cy.xpath(locators.EXTRACT.FN_XP_LINE('Despesa Pendente')).should('have.class', 'despesaPendente');
   });
 });

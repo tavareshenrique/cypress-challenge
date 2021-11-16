@@ -30,6 +30,7 @@ const locators = {
     XP_SEARCH_ELEMENT: "//span[contains(., 'Salário')]//following-sibling::small[contains(., '123')]",
     FN_XP_REMOVE_ELEMENT: (account) => `//span[contains(., '${account}')]/../../..//i[@class='far fa-trash-alt']`,
     FN_XP_ALTERAR_ELEMENT: (account) => `//span[contains(., '${account}')]/../../..//i[@class='fas fa-edit']`,
+    FN_XP_LINE: (desc) => `//span[contains(., '${desc}')]/../../../..`,
   },
   BALANCE: {
     FN_XP_SALDO_CONTA: (name) => `//td[contains(., '${name}')]//../td[2]`,
