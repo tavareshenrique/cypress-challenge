@@ -143,7 +143,7 @@ describe('Should test at a functional level', () => {
     cy.xpath(locators.EXTRACT.XP_SEARCH_ELEMENT).should('exist');
   });
 
-  it.only('should get balance', () => {
+  it('should get balance', () => {
     cy.route({
       method: 'GET',
       url: '/transacoes/**',
@@ -196,9 +196,16 @@ describe('Should test at a functional level', () => {
   });
 
   it('should remove a transaction', () => {
+    cy.route({
+      method: 'DELETE',
+      url: '/transacoes/**',
+      response: {},
+      status: 204,
+    }).as('del');
+
     cy.get(locators.MENU.EXTRACT).click();
 
-    cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Movimentacao para exclusao')).click();
+    cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Movimentacao para extrato')).click();
 
     cy.get(locators.MESSAGE).should('contain', 'sucesso');
   });
