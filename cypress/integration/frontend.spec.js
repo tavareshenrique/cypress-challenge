@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /// <reference types="Cypress" />
 
 import '../support/commandsAccount';
@@ -208,5 +209,64 @@ describe('Should test at a functional level', () => {
     cy.xpath(locators.EXTRACT.FN_XP_REMOVE_ELEMENT('Movimentacao para extrato')).click();
 
     cy.get(locators.MESSAGE).should('contain', 'sucesso');
+  });
+
+  it.only('should validate data send to create an account', () => {
+    const reqStub = cy.stub();
+
+    cy.route({
+      method: 'POST',
+      url: '/contas',
+      response: {
+        id: 3,
+        nome: 'Conta de Teste',
+        visivel: true,
+        usuario_id: 1,
+      },
+      onRequest: (req) => {
+        expect(req.request.body.nome).to.be.empty;
+        expect(req.request.headers).to.have.property('Authorization');
+      },
+      // onRequest: reqStub,
+    }).as('saveAccount');
+
+    cy.accessAccountMenu();
+
+    cy.route({
+      method: 'GET',
+      url: '/contas',
+      response: [
+        {
+          id: 1,
+          nome: 'Carteira',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 2,
+          nome: 'Banco',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 3,
+          nome: 'Conta de Teste',
+          visivel: true,
+          usuario_id: 1,
+        },
+      ],
+    }).as('accountsSaves');
+
+    cy.addAccount('{CONTROL}');
+
+    // cy.wait('@saveAccount').its('request.body.nome').should('be.empty');
+    // cy.wait('@saveAccount').then(() => {
+    //   expect(reqStub.args[0][0].request.body.nome).to.be.empty;
+    //   expect(reqStub.args[0][0].request.headers).to.have.property('Authorization');
+    // });
+
+    cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso', {
+      timeout: 10000,
+    });
   });
 });
