@@ -91,12 +91,17 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it('should not create an account with same name', () => {
+  it.only('should not create an account with same name', () => {
+    cy.route({
+      method: 'POST',
+      url: '/contas',
+      response: { error: 'Já existe uma conta com esse nome!' },
+      status: 400,
+    }).as('same name');
+
     cy.accessAccountMenu();
 
     cy.addAccount('Conta mesmo nome');
-
-    cy.get(locators.ACCOUNTS.BTN_SAVE).click();
 
     cy.get(locators.MESSAGE).should('contain', 'code 400', {
       timeout: 10000,
