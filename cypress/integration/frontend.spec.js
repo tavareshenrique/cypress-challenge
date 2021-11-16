@@ -46,7 +46,7 @@ describe('Should test at a functional level', () => {
     cy.get(locators.MENU.HOME).click();
   });
 
-  it.only('should create an account', () => {
+  it('should create an account', () => {
     cy.route({
       method: 'GET',
       url: '/contas',
@@ -111,11 +111,41 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it('should update an account', () => {
+  it.only('should update an account', () => {
+    cy.route({
+      method: 'GET',
+      url: '/contas',
+      response: [
+        {
+          id: 1,
+          nome: 'Carteira',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 2,
+          nome: 'Banco',
+          visivel: true,
+          usuario_id: 1,
+        },
+      ],
+    }).as('contas');
+
+    cy.route({
+      method: 'PUT',
+      url: '/contas/**',
+      response: {
+        id: 1,
+        nome: 'Updated Account',
+        visivel: true,
+        usuario_id: 1,
+      },
+    }).as('conta alterada');
+
     cy.get(locators.MENU.SETTINGS).click();
     cy.get(locators.MENU.ACCOUNTS).click();
 
-    cy.xpath(locators.ACCOUNTS.XP_BTN_CHANGE('Conta para alterar')).click();
+    cy.xpath(locators.ACCOUNTS.XP_BTN_CHANGE('Carteira')).click();
 
     cy.get(locators.ACCOUNTS.NOME)
       .clear()
