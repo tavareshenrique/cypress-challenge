@@ -212,7 +212,7 @@ describe('Should test at a functional level', () => {
   });
 
   it.only('should validate data send to create an account', () => {
-    const reqStub = cy.stub();
+    // const reqStub = cy.stub();
 
     cy.route({
       method: 'POST',
