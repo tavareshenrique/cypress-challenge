@@ -3,69 +3,22 @@
 import '../support/commandsAccount';
 
 import locators from '../support/locators';
+import buildEnv from '../support/buildEnv';
 
 describe('Should test at a functional level', () => {
   after(() => {
     cy.clearLocalStorage();
   });
 
-  before(() => {
-    cy.server();
-
-    cy.route({
-      method: 'POST',
-      url: '/signin',
-      response: {
-        id: 1000,
-        nome: 'Fake User',
-        token: 'fake-token',
-      },
-    }).as('signin');
-
-    cy.route({
-      method: 'GET',
-      url: '/saldo',
-      response: [
-        {
-          conta_id: 999,
-          conta: 'Fake Account',
-          saldo: '100.00',
-        },
-        {
-          conta_id: 998,
-          conta: 'Fake Account Two',
-          saldo: '5500.00',
-        },
-      ],
-    }).as('balance');
+  beforeEach(() => {
+    buildEnv();
 
     cy.login('ihenrits@gmail.com', 'senha errada');
-  });
 
-  beforeEach(() => {
     cy.get(locators.MENU.HOME).click();
   });
 
   it('should create an account', () => {
-    cy.route({
-      method: 'GET',
-      url: '/contas',
-      response: [
-        {
-          id: 1,
-          nome: 'Carteira',
-          visivel: true,
-          usuario_id: 1,
-        },
-        {
-          id: 2,
-          nome: 'Banco',
-          visivel: true,
-          usuario_id: 1,
-        },
-      ],
-    }).as('contas');
-
     cy.route({
       method: 'POST',
       url: '/contas',
@@ -102,7 +55,7 @@ describe('Should test at a functional level', () => {
           usuario_id: 1,
         },
       ],
-    }).as('contasSave');
+    }).as('accountsSaves');
 
     cy.addAccount('Test Account');
 
@@ -111,26 +64,7 @@ describe('Should test at a functional level', () => {
     });
   });
 
-  it.only('should update an account', () => {
-    cy.route({
-      method: 'GET',
-      url: '/contas',
-      response: [
-        {
-          id: 1,
-          nome: 'Carteira',
-          visivel: true,
-          usuario_id: 1,
-        },
-        {
-          id: 2,
-          nome: 'Banco',
-          visivel: true,
-          usuario_id: 1,
-        },
-      ],
-    }).as('contas');
-
+  it('should update an account', () => {
     cy.route({
       method: 'PUT',
       url: '/contas/**',
@@ -140,7 +74,7 @@ describe('Should test at a functional level', () => {
         visivel: true,
         usuario_id: 1,
       },
-    }).as('conta alterada');
+    }).as('updated account');
 
     cy.get(locators.MENU.SETTINGS).click();
     cy.get(locators.MENU.ACCOUNTS).click();
