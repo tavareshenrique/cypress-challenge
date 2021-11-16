@@ -44,11 +44,66 @@ describe('Should test at a functional level', () => {
 
   beforeEach(() => {
     cy.get(locators.MENU.HOME).click();
-    cy.resetApp();
   });
 
   it.only('should create an account', () => {
+    cy.route({
+      method: 'GET',
+      url: '/contas',
+      response: [
+        {
+          id: 1,
+          nome: 'Carteira',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 2,
+          nome: 'Banco',
+          visivel: true,
+          usuario_id: 1,
+        },
+      ],
+    }).as('contas');
+
+    cy.route({
+      method: 'POST',
+      url: '/contas',
+      response: {
+        id: 3,
+        nome: 'Conta de Teste',
+        visivel: true,
+        usuario_id: 1,
+      },
+    });
+
     cy.accessAccountMenu();
+
+    cy.route({
+      method: 'GET',
+      url: '/contas',
+      response: [
+        {
+          id: 1,
+          nome: 'Carteira',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 2,
+          nome: 'Banco',
+          visivel: true,
+          usuario_id: 1,
+        },
+        {
+          id: 3,
+          nome: 'Conta de Teste',
+          visivel: true,
+          usuario_id: 1,
+        },
+      ],
+    }).as('contasSave');
+
     cy.addAccount('Test Account');
 
     cy.get(locators.MESSAGE).should('contain', 'Conta inserida com sucesso', {
