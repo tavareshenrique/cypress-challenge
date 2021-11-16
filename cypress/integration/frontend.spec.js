@@ -143,9 +143,25 @@ describe('Should test at a functional level', () => {
     cy.xpath(locators.EXTRACT.XP_SEARCH_ELEMENT).should('exist');
   });
 
-  it('should get balance', () => {
+  it.only('should get balance', () => {
+    cy.route({
+      method: 'GET',
+      url: '/transacoes/**',
+      response: {
+        conta: 'Conta para saldo', id: 854847, descricao: 'Movimentacao 1, calculo saldo', envolvido: 'CCC', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '100.00', status: false, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      },
+    });
+
+    cy.route({
+      method: 'PUT',
+      url: '/transacoes/**',
+      response: {
+        conta: 'Conta para saldo', id: 854847, descricao: 'Movimentacao 1, calculo saldo', envolvido: 'CCC', observacao: null, tipo: 'REC', data_transacao: '2021-11-10T03:00:00.000Z', data_pagamento: '2021-11-10T03:00:00.000Z', valor: '100.00', status: false, conta_id: 919619, usuario_id: 25902, transferencia_id: null, parcelamento_id: null,
+      },
+    });
+
     cy.get(locators.MENU.HOME).click();
-    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '534,00');
+    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Fake Account')).should('contain', '100,00');
 
     cy.get(locators.MENU.EXTRACT).click();
     cy.xpath(locators.EXTRACT.FN_XP_ALTERAR_ELEMENT('Movimentacao 1, calculo saldo')).click();
@@ -157,11 +173,26 @@ describe('Should test at a functional level', () => {
 
     cy.get(locators.MESSAGE).should('not.have.value', 'sucesso');
 
-    cy.wait(1000);
+    cy.route({
+      method: 'GET',
+      url: '/saldo',
+      response: [
+        {
+          conta_id: 999,
+          conta: 'Fake Account',
+          saldo: '200.00',
+        },
+        {
+          conta_id: 998,
+          conta: 'Fake Account Two',
+          saldo: '5500.00',
+        },
+      ],
+    }).as('balance');
 
     cy.get(locators.MENU.HOME).click();
 
-    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '4.034,00');
+    cy.xpath(locators.BALANCE.FN_XP_SALDO_CONTA('Fake Account')).should('contain', '200,00');
   });
 
   it('should remove a transaction', () => {
