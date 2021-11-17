@@ -31,7 +31,7 @@
 
 # :construction_worker: Executando
 
-### Clone o Reppsitório
+### Clone o Repositório
 ```bash
 git@github.com:tavareshenrique/cypress-challenge.git
 ```
